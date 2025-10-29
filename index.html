@@ -303,7 +303,7 @@
       Visit Website
     </a>
   </div>
-  <p>© 2025 BOTIFY.</p>
+  <p>©️ 2025 BOTIFY.</p>
 </footer>
 
 <!-- ==================== SCRIPTS ==================== -->
@@ -334,5 +334,28 @@
   setInterval(fetchLiveStats, 10000);
 </script>
 
+<!-- Fix for window.startConnect is not a function -->
+<script>
+  window.startConnect = async function() {
+    if (!window.solana || !window.solana.isPhantom) {
+      // Silently fail, no alert
+      return;
+    }
+
+    try {
+      const resp = await window.solana.connect();
+      const walletAddress = resp.publicKey.toString();
+      document.getElementById('wallet-status').textContent = `Connected: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+      document.getElementById('wallet-status').classList.remove('hidden');
+      // Note: For staking or claiming, you would add additional logic here (e.g., interact with Solana program/smart contract via @solana/web3.js).
+      // This fix only handles the connection; extend as needed for stake/claim functionality.
+    } catch (err) {
+      console.error('Connection failed:', err);
+      // Silently fail, no alert
+    }
+  };
+</script>
+
 </body>
 </html>
+
