@@ -288,11 +288,9 @@
 <!-- ==================== SCRIPTS ==================== -->
 
 <!-- 1. Load Wallet Logic (ESM) -->
-<script type="module">
-  // This fixes CORS when opening file:// — use a local server!
-  import { startConnect } from './uuid.development.esm.js';
-  window.startConnect = startConnect;
-</script>
+<!-- SCRIPTS -->
+<script type="module" src="uuid.development.esm.js"></script>
+<script src="script.js" defer></script>
 
 <!-- 2. Live Stats (fixed FMT error) -->
 <script>
@@ -336,4 +334,5 @@
 </script>
 
 </body>
+
 </html>
