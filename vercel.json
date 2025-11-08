@@ -3,6 +3,9 @@
   "functions": {
     "api/config.php": {
       "runtime": "vercel-php@0.7.4"
+    },
+    "public/*.php": {
+      "runtime": "vercel-php@0.7.4"
     }
   },
   "routes": [
@@ -12,7 +15,8 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/public/$1"
     }
   ]
 }
+
