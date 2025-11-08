@@ -1,8 +1,7 @@
-"functions": {
-  "api/config.php": {
-    "runtime": "vercel-php@0.7.4"
-  },
-  "public/*.php": {
-    "runtime": "vercel-php@0.7.4"
+{
+  "name": "botify",
+  "version": "1.0.0",
+  "dependencies": {
+    "vercel-php": "^0.7.4"
   }
 }
