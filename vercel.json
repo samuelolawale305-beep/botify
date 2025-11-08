@@ -11,8 +11,12 @@
       "dest": "/api/config.php"
     },
     {
+      "src": "/(.*\\.(html|js|css|png|jpg|jpeg|svg|ico|json))",
+      "dest": "/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/public/$1"
+      "dest": "/index.html"
     }
   ]
 }
