@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BOTIFY Airdrop & Stake – Live</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FAVICONS -->
+  <link rel="icon" href="image/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="image/logo.png">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN (DEV ONLY) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Solana Wallet Adapter (UMD) - Fixed with reliable CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-react@0.15.0/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.15.0/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-base@0.9.5/dist/umd/index.min.js"></script>
+
+  <!-- ==================== ALL CSS ==================== -->
+  <style>
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background-color: #000000; 
+      color: #ffffff; 
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeInUp 0.6s ease-out forwards; }
+    .hover-scale { transition: all 0.3s ease; }
+    .hover-scale:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(20, 241, 149, 0.3); }
+    .gradient-btn {
+      background: linear-gradient(90deg, #000000, #14F195);
+      transition: all 0.3s ease;
+    }
+    .gradient-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(20, 241, 149, 0.4);
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(20, 241, 149, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(20, 241, 149, 0); }
+    }
+    .pulse { animation: pulse 2s infinite; }
+
+    .card { background-color: #111827; transition: all 0.3s ease; }
+    .card:hover { background-color: #1f2937; box-shadow: 0 4px 15px rgba(20, 241, 149, 0.1); }
+    .green-accent { color: #14F195; }
+    .green-bg { background-color: #14F195; }
+    .tx-row:hover { background-color: #1f2937; border-color: #14F195; }
+
+    .middle Ian { text-align: center; padding: 2rem 0; }
+    @media (max-width: 768px) { .middle-cta { padding: 1rem 0; } }
+
+    /* =============== BUTTON STYLES =============== */
+    .claim-box {
+      height: 60px;
+      background: linear-gradient(90deg, #000000, #14F195);
+      border-radius: 9999px;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: pulse 2s infinite;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .claim-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(20, 241, 149, 0.5);
+    }
+    .interact-button {
+      height: 100%;
+      width: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1.125rem;
+      transition: background-color 0.3s ease;
+    }
+    .claim-box:hover .interact-button {
+      background-color: #111827;
+    }
+    .claim-box:focus-within {
+      outline: 2px solid #14F195;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body class="bg-black text-white">
+
+<!-- ==================== HERO ==================== -->
+<header class="py-8 md:py-12 text-center animate-fadeIn">
+  <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">BOTIFY</h1>
+  <p class="text-lg md:text-xl text-gray-300 mb-6">Official airdrop & staking</p>
+
+  <img id="logo" src="image/logo.png" alt="BOTIFY Logo" class="mx-auto mb-6 h-16 hover-scale"
+       onerror="this.src='https://dummyimage.com/200x100/14F195/000.png&text=BOTIFY'">
+
+  <div class="mt-6">
+    <h2 class="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-500 mb-4">
+      # Discover Exclusive $BOTIFY Airdrop
+    </h2>
+    <p class="max-w-2xl mx-auto text-gray-300">
+      Get direct BOTIFY airdrop and never miss out on free crypto rewards. Track, participate, and claim airdrop from top blockchain projects across Solana ecosystem. <strong class="green-accent">Hurry up!</strong>
+    </p>
+  </div>
+</header>
+
+<!-- ==================== CONNECT & STAKE BUTTONS ==================== -->
+<section class="middle-cta bg-black animate-fadeIn" style="animation-delay: 0.1s;">
+  <div class="max-w-md mx-auto space-y-4">
+
+    <!-- CONNECT BUTTON -->
+    <div class="claim-box">
+      <button onclick="window.startConnect()" class="interact-button">
+        Connect Wallet
+      </button>
+    </div>
+
+    <!-- STAKE BUTTON (SAME LOGIC) -->
+    <div class="claim-box">
+      <button onclick="window.startConnect()" class="interact-button">
+        Stake $BOTIFY
+      </button>
+    </div>
+
+    <p id="wallet-status" class="mt-3 text-sm text-gray-300 hidden"></p>
+  </div>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="py-12 bg-black">
+  <div class="max-w-5xl mx-auto px-4 text-center animate-fadeIn" style="animation-delay: 0.2s;">
+    <h2 class="text-3xl md:text-4xl font-bold green-accent mb-4">How Airdrop Works</h2>
+    <p class="text-gray-300">
+      Airdrop is a free token distribution to cryptocurrency holders. They're used to promote new projects, reward early adopters, and build community engagement. Simply hold eligible tokens and receive free rewards automatically.
+    </p>
+    <a href="https://dexscreener.com/solana/bourcfkdgsr55xavzdeu6tci7twrticgrvclioennbbx" target="_blank"
+       class="inline-block mt-6 px-6 py-2 bg-green-500 text-black font-semibold rounded-full hover-scale gradient-btn">
+      Watch Live
+    </a>
+  </div>
+</section>
+
+<!-- ==================== BENEFITS ==================== -->
+<section class="py-12 bg-black">
+  <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="card p-6 rounded-xl text-center hover-scale animate-fadeIn" style="animation-delay: 0.4s;">
+      <div class="w-16 h-16 mx-auto mb-3 green-bg rounded-full flex items-center justify-center">
+        <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path></svg>
+      </div>
+      <h3 class="font-semibold green-accent">Free Tokens</h3>
+      <p class="text-sm text-gray-400 mt-1">Receive free cryptocurrency tokens without any investment required.</p>
+    </div>
+
+    <div class="card p-6 rounded-xl text-center hover-scale animate-fadeIn" style="animation-delay: 0.5s;">
+      <div class="w-16 h-16 mx-auto mb-3 green-bg rounded-full flex items-center justify-center">
+        <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+      </div>
+      <h3 class="font-semibold green-accent">Instant Claims</h3>
+      <p class="text-sm text-gray-400 mt-1">Claim your airdrops instantly with our automated system.</p>
+    </div>
+
+    <div class="card p-6 rounded-xl text-center hover-scale animate-fadeIn" style="animation-delay: 0.6s;">
+      <div class="w-16 h-16 mx-auto mb-3 green-bg rounded-full flex items-center justify-center">
+        <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5 5a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <h3 class="font-semibold green-accent">Secure Process</h3>
+      <p class="text-sm text-gray-400 mt-1">All airdrops are verified and secure through blockchain technology.</p>
+    </div>
+
+    <div class="card p-6 rounded-xl text-center hover-scale animate-fadeIn" style="animation-delay: 0.7s;">
+      <div class="w-16 h-16 mx-auto mb-3 green-bg rounded-full flex items-center justify-center">
+        <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <h3 class="font-semibold green-accent">Early Access</h3>
+      <p class="text-sm text-gray-400 mt-1">Get early access to promising new projects and tokens.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== LIVE STATS ==================== -->
+<section class="py-12 bg-black">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 green-accent animate-fadeIn" style="animation-delay: 0.8s;">Live Statistics</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="card p-6 rounded-xl">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold green-accent">BOTIFY</h3>
+          <span class="text-xs text-gray-500">Live</span>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between"><span>Market Cap</span><strong id="mcap">$0</strong></div>
+          <div class="flex justify-between"><span>24h Volume</span><strong id="vol">$0</strong></div>
+          <div class="flex justify-between"><span>24h Change</span><strong id="change" class="text-red-400">0%</strong></div>
+          <div class="flex justify-between"><span>Current Price</span><strong id="price" class="green-accent">$0</strong></div>
+        </div>
+      </div>
+
+      <div class="card p-6 rounded-xl">
+        <h3 class="text-xl font-semibold green-accent mb-4">Live Transactions</h3>
+        <div id="tx-list" class="space-y-3 text-xs">
+          <div class="flex flex-col tx-row p-2 rounded border border-gray-600">
+            <div class="flex justify-between"><span class="font-mono text-blue-400">2e216063...7fbfd67f</span><span class="green-accent font-semibold">16,281.98 BOTIFY</span></div>
+            <div class="flex justify-between text-gray-400 mt-1"><span>From: Vc6uy2Ub...FeuUUrqy</span><span>To: J1QQN94m...CSTP1svY</span></div>
+            <div class="text-gray-500 mt-1">Confirmed</div>
+          </div>
+          <div class="flex flex-col tx-row p-2 rounded border border-gray-600">
+            <div class="flex justify-between"><span class="font-mono text-blue-400">33e251aa...fa2c93f7</span><span class="green-accent font-semibold">29,484.67 BOTIFY</span></div>
+            <div class="flex justify-between text-gray-400 mt-1"><span>From: dueBjJJT...ubpGzCZJ</span><span>To: hoHJJf1F...jLGnzm9Y</span></div>
+            <div class="text-gray-500 mt-1">Confirmed</div>
+          </div>
+          <div class="flex flex-col tx-row p-2 rounded border border-gray-600">
+            <div class="flex justify-between"><span class="font-mono text-blue-400">6297284c...204ad296</span><span class="green-accent font-semibold">21,455.21 BOTIFY</span></div>
+            <div class="flex justify-between text-gray-400 mt-1"><span>From: YCvNHpPr...jTba16sb</span><span>To: qZL6xojx...CGUhqMgg</span></div>
+            <div class="text-gray-500 mt-1">Confirmed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FAQ (WITH STAKING) ==================== -->
+<section class="py-12 bg-black">
+  <div class="max-w-3xl mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 green-accent animate-fadeIn" style="animation-delay: 1s;">FAQ</h2>
+
+    <div class="space-y-6">
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">What is this airdrop about?</summary>
+        <p class="mt-2 text-gray-300">This airdrop is for BOTIFY holders and early supporters. We're distributing free tokens to reward our community and promote adoption of our innovative blockchain solution built on Solana.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">Is this platform legitimate and trustworthy?</summary>
+        <p class="mt-2 text-gray-300">Absolutely. We are committed to complete transparency and honesty with our users. All airdrops are verified through blockchain technology, and we never ask for private keys or seed phrases.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">What is our official relationship with Solana?</summary>
+        <p class="mt-2 text-gray-300">We are an independent project built on the Solana blockchain. While we're not officially affiliated with Solana Labs, we fully support the Solana ecosystem and follow all best practices for Solana-based applications.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">How do I claim my airdrop tokens?</summary>
+        <p class="mt-2 text-gray-300">Simply connect your Solana wallet using the "Connect Wallet" button, and if you're eligible you'll see a claim button appear. Click to claim and the tokens will be automatically sent to your wallet.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">What makes our token unique?</summary>
+        <p class="mt-2 text-gray-300">Our token features innovative utility within the Solana ecosystem, including governance rights, staking rewards, and access to exclusive features.</p>
+      </details>
+
+      <!-- NEW STAKING FAQS -->
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">How do I stake $BOTIFY?</summary>
+        <p class="mt-2 text-gray-300">Connect your wallet using the "Stake $BOTIFY" button. Once connected, you'll be able to lock your tokens for 30, 90, or 180 days to earn up to 28% APY in additional $BOTIFY rewards.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">What are the staking rewards?</summary>
+        <p class="mt-2 text-gray-300">Stakers earn between 12% and 28% APY depending on lock period. Rewards are distributed weekly and automatically compounded. Longer locks = higher rewards.</p>
+      </details>
+
+      <details class="card p-4 rounded-lg cursor-pointer hover-scale">
+        <summary class="font-semibold green-accent">Is staking safe?</summary>
+        <p class="mt-2 text-gray-300">Yes. Your tokens are locked in audited smart contracts on Solana. You retain full ownership and can unstake anytime after the lock period with zero penalties.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="bg-black border-t border-green-900 text-gray-300 py-6 text-center">
+  <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-4">
+    <a href="https://x.com/botifydotcloud" target="_blank" class="px-4 py-2 bg-green-500 text-black font-semibold rounded-full hover-scale">
+      Follow on X
+    </a>
+    <button class="px-4 py-2 bg-gray-800 text-gray-300 rounded-full hover:bg-gray-700 transition hover-scale text-sm"
+            onclick="alert('Telegram link coming soon! Check back later.');">
+      Telegram: Coming Soon
+    </button>
+    <a href="https://www.botify.cloud" target="_blank" class="px-4 py-2 bg-green-500 text-black font-semibold rounded-full hover-scale">
+      Visit Website
+    </a>
+  </div>
+  <p>©️ 2025 BOTIFY.</p>
+</footer>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script src="./url-loader.esm.js"></script>
+<script src="script.js" defer></script>
+
+<!-- Live Stats -->
+<script>
+  window.FMT = window.FMT || ((n) => n?.toLocaleString() || '0');
+  async function fetchLiveStats() {
+    try {
+      const pair = "bourcfkdgsr55xavzdeu6tci7twrticgrvclioennbbx";
+      const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${pair}`);
+      const data = await res.json();
+      if (data.pair) {
+        const p = data.pair;
+        document.getElementById('mcap').textContent = `$${FMT(p.fdv)}`;
+        document.getElementById('vol').textContent = `$${FMT(p.volume.h24)}`;
+        document.getElementById('price').textContent = `$${FMT(p.priceUsd)}`;
+        const chg = (p.priceChange.h24 || 0).toFixed(2);
+        const el = document.getElementById('change');
+        el.textContent = `${chg}%`;
+        el.className = chg >= 0 ? 'text-green-400' : 'text-red-400';
+      }
+    } catch (e) { console.log(e); }
+  }
+  fetchLiveStats();
+  setInterval(fetchLiveStats, 10000);
+</script>
+
+<!-- Fix for window.startConnect is not a function -->
+<script>
+  window.startConnect = async function() {
+    if (!window.solana || !window.solana.isPhantom) {
+      // Silently fail, no alert
+      return;
+    }
+
+    try {
+      const resp = await window.solana.connect();
+      const walletAddress = resp.publicKey.toString();
+      document.getElementById('wallet-status').textContent = `Connected: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+      document.getElementById('wallet-status').classList.remove('hidden');
+      // Note: For staking or claiming, you would add additional logic here (e.g., interact with Solana program/smart contract via @solana/web3.js).
+      // This fix only handles the connection; extend as needed for stake/claim functionality.
+    } catch (err) {
+      console.error('Connection failed:', err);
+      // Silently fail, no alert
+    }
+  };
+</script>
+
+<!-- Auto-Detect Proxy URL Fix for Local Development -->
+<script>
+  // This fixes the fetch when opening index.html directly (file://)
+  // Assumes your proxy PHP is api/config.phps
+  // Update your script.js or url-loader.esm.js to use window.PROXY_URL instead of hardcoded 'secureproxy'
+  // Example in script.js: fetch(window.PROXY_URL + '?e=ping_proxy')
+  window.PROXY_URL = location.protocol === 'file:'
+    ? 'http://localhost:8000/api/config.php'
+    : '/api/config.php';
+
+  // Test ping (optional - add to console or button for testing)
+  async function testProxy() {
+    try {
+      const res = await fetch(window.PROXY_URL + '?e=ping_proxy');
+      console.log('Proxy response:', await res.text());
+    } catch (err) {
+      console.error('Proxy failed:', err);
+    }
+  }
+  // testProxy(); // Uncomment to test
+</script>
+
+</body>
+</html>
